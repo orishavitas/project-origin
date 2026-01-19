@@ -1,0 +1,232 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "validation_rules.json",
+  "title": "ValidationRules",
+  "description": "Programmatic rules for validating requests and MRDs. Human Reference: PRD.md §5, DESIGN_GUIDE.md §5",
+  "type": "object",
+  "properties": {
+    "scope_rules": {
+      "type": "object",
+      "description": "Rules for scope assessment",
+      "properties": {
+        "product_categories": {
+          "type": "object",
+          "properties": {
+            "in_scope": {
+              "type": "array",
+              "items": { "type": "string" },
+              "default": ["enclosure", "mount", "stand", "lock", "charging", "accessory"]
+            },
+            "out_of_scope": {
+              "type": "array",
+              "items": { "type": "string" },
+              "default": ["software", "service", "consulting", "custom_manufacturing"]
+            }
+          }
+        },
+        "materials": {
+          "type": "object",
+          "properties": {
+            "standard": {
+              "type": "array",
+              "items": { "type": "string" },
+              "default": ["aluminum", "steel", "abs", "polycarbonate", "acrylic"]
+            },
+            "requires_review": {
+              "type": "array",
+              "items": { "type": "string" },
+              "default": ["wood", "glass", "carbon_fiber", "custom"]
+            }
+          }
+        },
+        "moq_thresholds": {
+          "type": "object",
+          "properties": {
+            "standard_minimum": {
+              "type": "integer",
+              "default": 100
+            },
+            "custom_minimum": {
+              "type": "integer",
+              "default": 500
+            },
+            "yellow_flag_below": {
+              "type": "integer",
+              "default": 50
+            }
+          }
+        },
+        "verticals": {
+          "type": "object",
+          "properties": {
+            "primary": {
+              "type": "array",
+              "items": { "type": "string" },
+              "default": ["retail", "hospitality", "healthcare", "corporate", "education"]
+            },
+            "secondary": {
+              "type": "array",
+              "items": { "type": "string" },
+              "default": ["government", "transportation", "industrial", "residential"]
+            }
+          }
+        }
+      }
+    },
+    "mrd_completeness": {
+      "type": "object",
+      "description": "Rules for MRD section validation",
+      "properties": {
+        "required_sections": {
+          "type": "array",
+          "items": { "type": "string" },
+          "default": [
+            "purpose_vision",
+            "problem_statement",
+            "target_market_use_cases",
+            "target_users",
+            "product_description",
+            "key_requirements",
+            "design_aesthetics",
+            "target_price",
+            "risks_thoughts",
+            "competition_review",
+            "additional_considerations",
+            "success_criteria"
+          ]
+        },
+        "minimum_content": {
+          "type": "object",
+          "description": "Minimum content requirements per section",
+          "properties": {
+            "purpose_vision": { "min_words": 50 },
+            "problem_statement": { "min_words": 75 },
+            "target_market_use_cases": { "min_markets": 1, "min_use_cases": 2 },
+            "target_users": { "min_personas": 1 },
+            "product_description": { "min_features": 3 },
+            "key_requirements": { "min_functional": 3, "min_technical": 2 },
+            "target_price": { "required_fields": ["msrp", "rationale"] },
+            "risks_thoughts": { "min_risks": 2 },
+            "competition_review": { "min_competitors": 3 },
+            "success_criteria": { "min_metrics": 2 }
+          }
+        },
+        "quality_thresholds": {
+          "type": "object",
+          "properties": {
+            "ready_for_review": { "min_completeness": 80, "min_quality_score": 70 },
+            "ready_for_approval": { "min_completeness": 95, "min_quality_score": 80 }
+          }
+        }
+      }
+    },
+    "clarification_rules": {
+      "type": "object",
+      "description": "Rules for clarification workflow",
+      "properties": {
+        "max_questions_per_email": { "type": "integer", "default": 5 },
+        "max_clarification_rounds": { "type": "integer", "default": 2 },
+        "critical_fields": {
+          "type": "array",
+          "items": { "type": "string" },
+          "default": ["target_markets", "use_cases", "target_price"]
+        },
+        "question_priority": {
+          "type": "array",
+          "items": { "type": "string" },
+          "default": [
+            "target_markets",
+            "use_cases",
+            "target_price",
+            "device_compatibility",
+            "volume_expectation",
+            "timeline"
+          ]
+        },
+        "timeout_days": {
+          "type": "object",
+          "properties": {
+            "reminder": { "type": "integer", "default": 7 },
+            "escalate": { "type": "integer", "default": 14 }
+          }
+        }
+      }
+    },
+    "escalation_rules": {
+      "type": "object",
+      "description": "Rules for escalation triggers",
+      "properties": {
+        "triggers": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "condition": { "type": "string" },
+              "threshold": { "type": "integer" },
+              "notify": { "type": "array", "items": { "type": "string" } },
+              "action": { "type": "string" }
+            }
+          },
+          "default": [
+            {
+              "condition": "scope_flag_red",
+              "threshold": 1,
+              "notify": ["senior_rd_designer"],
+              "action": "email_notification"
+            },
+            {
+              "condition": "repeated_boundary_violations",
+              "threshold": 3,
+              "notify": ["it", "regional_sales_manager", "svp_marketing", "svp_sales"],
+              "action": "email_notification"
+            },
+            {
+              "condition": "request_stale_days",
+              "threshold": 7,
+              "notify": ["requestor"],
+              "action": "reminder_email"
+            },
+            {
+              "condition": "request_stale_days",
+              "threshold": 14,
+              "notify": ["department_head"],
+              "action": "escalation_email"
+            },
+            {
+              "condition": "ip_patent_flag",
+              "threshold": 1,
+              "notify": ["head_of_rd"],
+              "action": "email_notification"
+            }
+          ]
+        }
+      }
+    },
+    "research_rules": {
+      "type": "object",
+      "description": "Rules for competitive research",
+      "properties": {
+        "required_competitors": {
+          "type": "array",
+          "items": { "type": "string" },
+          "default": [
+            "bouncepad",
+            "displays2go",
+            "heckler",
+            "ergotron",
+            "peerless-av",
+            "chief",
+            "kensington"
+          ]
+        },
+        "min_competitors_per_mrd": { "type": "integer", "default": 3 },
+        "required_fields_per_competitor": {
+          "type": "array",
+          "items": { "type": "string" },
+          "default": ["product_name", "url", "price", "key_features", "device_compatibility"]
+        },
+        "max_research_attempts": { "type": "integer", "default": 3 }
+      }
+    }
+  }
+}

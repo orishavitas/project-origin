@@ -1,0 +1,225 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "parsed_data.json",
+  "title": "MergedRequestData",
+  "description": "Complete request data after clarification rounds, ready for research. Human Reference: PRD.md §4.2",
+  "type": "object",
+  "required": [
+    "request_id",
+    "product_concept",
+    "market_data",
+    "technical_spec",
+    "business_data",
+    "clarification_history",
+    "readiness"
+  ],
+  "properties": {
+    "request_id": {
+      "type": "string",
+      "description": "Links to original request.json"
+    },
+    "product_concept": {
+      "type": "object",
+      "required": ["name", "summary", "category"],
+      "properties": {
+        "name": { "type": "string" },
+        "summary": { "type": "string" },
+        "category": {
+          "type": "string",
+          "enum": ["enclosure", "mount", "stand", "lock", "charging", "accessory", "other"]
+        },
+        "subcategory": { "type": "string" }
+      }
+    },
+    "market_data": {
+      "type": "object",
+      "required": ["target_markets", "use_cases"],
+      "properties": {
+        "target_markets": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "object",
+            "required": ["vertical", "priority"],
+            "properties": {
+              "vertical": {
+                "type": "string",
+                "enum": ["Retail", "Hospitality", "Healthcare", "Corporate", "Education", "Other"]
+              },
+              "priority": {
+                "type": "string",
+                "enum": ["primary", "secondary"]
+              },
+              "notes": { "type": "string" }
+            }
+          }
+        },
+        "use_cases": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "object",
+            "required": ["description"],
+            "properties": {
+              "description": { "type": "string" },
+              "environment": { "type": "string" },
+              "user_type": { "type": "string" }
+            }
+          }
+        },
+        "target_users": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "role": { "type": "string" },
+              "needs": { "type": "array", "items": { "type": "string" } }
+            }
+          }
+        }
+      }
+    },
+    "technical_spec": {
+      "type": "object",
+      "properties": {
+        "device_compatibility": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "device": { "type": "string" },
+              "model": { "type": "string" },
+              "screen_size": { "type": "string" }
+            }
+          }
+        },
+        "mounting": {
+          "type": "object",
+          "properties": {
+            "type": {
+              "type": "string",
+              "enum": ["wall", "desk", "floor", "pole", "counter", "freestanding", "portable"]
+            },
+            "vesa_pattern": { "type": "string" },
+            "orientation": {
+              "type": "string",
+              "enum": ["portrait", "landscape", "both", "not_applicable"]
+            }
+          }
+        },
+        "materials": {
+          "type": "array",
+          "items": { "type": "string" }
+        },
+        "security_features": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "enum": ["keyed_lock", "combination_lock", "cable_lock", "adhesive", "tamper_resistant", "none"]
+          }
+        },
+        "power_requirements": {
+          "type": "object",
+          "properties": {
+            "charging_integrated": { "type": "boolean" },
+            "cable_management": { "type": "boolean" },
+            "power_source": { "type": "string" }
+          }
+        },
+        "other_requirements": {
+          "type": "array",
+          "items": { "type": "string" }
+        }
+      }
+    },
+    "business_data": {
+      "type": "object",
+      "properties": {
+        "target_price": {
+          "type": "object",
+          "properties": {
+            "msrp": { "type": "number" },
+            "cost_target": { "type": "number" },
+            "currency": { "type": "string", "default": "USD" },
+            "rationale": { "type": "string" }
+          }
+        },
+        "volume_projection": {
+          "type": "object",
+          "properties": {
+            "initial_order": { "type": "integer" },
+            "annual_estimate": { "type": "integer" },
+            "growth_potential": { "type": "string" }
+          }
+        },
+        "timeline": {
+          "type": "object",
+          "properties": {
+            "urgency": { "type": "string", "enum": ["high", "medium", "low"] },
+            "target_launch": { "type": "string" },
+            "driver": { "type": "string" }
+          }
+        },
+        "competitive_context": {
+          "type": "string",
+          "description": "Why this product, why now, what's the opportunity"
+        }
+      }
+    },
+    "clarification_history": {
+      "type": "array",
+      "description": "Record of clarification rounds",
+      "items": {
+        "type": "object",
+        "required": ["round", "questions_asked", "response_received"],
+        "properties": {
+          "round": { "type": "integer" },
+          "sent_at": { "type": "string", "format": "date-time" },
+          "questions_asked": {
+            "type": "array",
+            "items": { "type": "string" }
+          },
+          "response_received": { "type": "string" },
+          "received_at": { "type": "string", "format": "date-time" },
+          "data_extracted": {
+            "type": "object",
+            "description": "Fields populated from this response"
+          }
+        }
+      }
+    },
+    "readiness": {
+      "type": "object",
+      "required": ["ready_for_research", "completeness_score"],
+      "properties": {
+        "ready_for_research": { "type": "boolean" },
+        "completeness_score": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 100
+        },
+        "remaining_gaps": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "field": { "type": "string" },
+              "impact": { "type": "string", "enum": ["critical", "moderate", "minor"] },
+              "workaround": { "type": "string" }
+            }
+          }
+        },
+        "scope_flags": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "level": { "type": "string", "enum": ["green", "yellow", "red"] },
+              "reason": { "type": "string" }
+            }
+          }
+        }
+      }
+    }
+  }
+}

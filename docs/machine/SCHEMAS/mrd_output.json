@@ -1,0 +1,407 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "mrd_output.json",
+  "title": "MRDOutput",
+  "description": "Structured MRD content ready for Google Docs rendering. Human Reference: PRD.md §4.4, Compulocks MRD template",
+  "type": "object",
+  "required": [
+    "request_id",
+    "document_metadata",
+    "sections",
+    "validation"
+  ],
+  "properties": {
+    "request_id": {
+      "type": "string",
+      "description": "Links to source request"
+    },
+    "document_metadata": {
+      "type": "object",
+      "required": ["title", "version", "created_at", "requestor"],
+      "properties": {
+        "title": { "type": "string" },
+        "version": { "type": "string", "default": "1.0" },
+        "created_at": { "type": "string", "format": "date-time" },
+        "requestor": {
+          "type": "object",
+          "properties": {
+            "name": { "type": "string" },
+            "email": { "type": "string" },
+            "department": { "type": "string" }
+          }
+        },
+        "status": {
+          "type": "string",
+          "enum": ["draft", "under_review", "approved", "rejected", "on_hold"]
+        }
+      }
+    },
+    "sections": {
+      "type": "object",
+      "description": "12-section MRD content matching Compulocks template",
+      "required": [
+        "purpose_vision",
+        "problem_statement",
+        "target_market_use_cases",
+        "target_users",
+        "product_description",
+        "key_requirements",
+        "design_aesthetics",
+        "target_price",
+        "risks_thoughts",
+        "competition_review",
+        "additional_considerations",
+        "success_criteria"
+      ],
+      "properties": {
+        "purpose_vision": {
+          "type": "object",
+          "required": ["content"],
+          "properties": {
+            "content": { "type": "string" },
+            "confidence": { "type": "string", "enum": ["high", "medium", "low"] },
+            "source": { "type": "string", "enum": ["requestor", "inferred", "research"] }
+          }
+        },
+        "problem_statement": {
+          "type": "object",
+          "required": ["content"],
+          "properties": {
+            "content": { "type": "string" },
+            "confidence": { "type": "string", "enum": ["high", "medium", "low"] },
+            "source": { "type": "string" }
+          }
+        },
+        "target_market_use_cases": {
+          "type": "object",
+          "required": ["markets", "use_cases"],
+          "properties": {
+            "markets": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "name": { "type": "string" },
+                  "description": { "type": "string" },
+                  "opportunity": { "type": "string" }
+                }
+              }
+            },
+            "use_cases": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "title": { "type": "string" },
+                  "description": { "type": "string" },
+                  "user_story": { "type": "string" }
+                }
+              }
+            },
+            "confidence": { "type": "string" },
+            "source": { "type": "string" }
+          }
+        },
+        "target_users": {
+          "type": "object",
+          "required": ["personas"],
+          "properties": {
+            "personas": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "role": { "type": "string" },
+                  "context": { "type": "string" },
+                  "needs": { "type": "array", "items": { "type": "string" } },
+                  "pain_points": { "type": "array", "items": { "type": "string" } }
+                }
+              }
+            },
+            "confidence": { "type": "string" },
+            "source": { "type": "string" }
+          }
+        },
+        "product_description": {
+          "type": "object",
+          "required": ["overview", "features"],
+          "properties": {
+            "overview": { "type": "string" },
+            "features": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "name": { "type": "string" },
+                  "description": { "type": "string" },
+                  "priority": { "type": "string", "enum": ["must_have", "should_have", "nice_to_have"] }
+                }
+              }
+            },
+            "differentiators": {
+              "type": "array",
+              "items": { "type": "string" }
+            },
+            "confidence": { "type": "string" },
+            "source": { "type": "string" }
+          }
+        },
+        "key_requirements": {
+          "type": "object",
+          "required": ["functional", "technical"],
+          "properties": {
+            "functional": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "requirement": { "type": "string" },
+                  "rationale": { "type": "string" },
+                  "priority": { "type": "string" }
+                }
+              }
+            },
+            "technical": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "requirement": { "type": "string" },
+                  "specification": { "type": "string" },
+                  "priority": { "type": "string" }
+                }
+              }
+            },
+            "constraints": {
+              "type": "array",
+              "items": { "type": "string" }
+            },
+            "confidence": { "type": "string" },
+            "source": { "type": "string" }
+          }
+        },
+        "design_aesthetics": {
+          "type": "object",
+          "properties": {
+            "style_direction": { "type": "string" },
+            "color_options": { "type": "array", "items": { "type": "string" } },
+            "finish_options": { "type": "array", "items": { "type": "string" } },
+            "branding_requirements": { "type": "string" },
+            "inspiration_references": { "type": "array", "items": { "type": "string" } },
+            "confidence": { "type": "string" },
+            "source": { "type": "string" }
+          }
+        },
+        "target_price": {
+          "type": "object",
+          "required": ["msrp"],
+          "properties": {
+            "msrp": {
+              "type": "object",
+              "properties": {
+                "value": { "type": "number" },
+                "currency": { "type": "string", "default": "USD" },
+                "range": {
+                  "type": "object",
+                  "properties": {
+                    "min": { "type": "number" },
+                    "max": { "type": "number" }
+                  }
+                }
+              }
+            },
+            "cost_target": { "type": "number" },
+            "margin_expectation": { "type": "string" },
+            "rationale": { "type": "string" },
+            "competitive_positioning": { "type": "string" },
+            "confidence": { "type": "string" },
+            "source": { "type": "string" }
+          }
+        },
+        "risks_thoughts": {
+          "type": "object",
+          "required": ["risks"],
+          "properties": {
+            "risks": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "category": { 
+                    "type": "string", 
+                    "enum": ["technical", "market", "competitive", "manufacturing", "regulatory", "other"] 
+                  },
+                  "description": { "type": "string" },
+                  "likelihood": { "type": "string", "enum": ["high", "medium", "low"] },
+                  "impact": { "type": "string", "enum": ["high", "medium", "low"] },
+                  "mitigation": { "type": "string" }
+                }
+              }
+            },
+            "open_questions": {
+              "type": "array",
+              "items": { "type": "string" }
+            },
+            "assumptions": {
+              "type": "array",
+              "items": { "type": "string" }
+            }
+          }
+        },
+        "competition_review": {
+          "type": "object",
+          "required": ["competitors_analyzed"],
+          "properties": {
+            "competitors_analyzed": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "required": ["company", "product_name"],
+                "properties": {
+                  "company": { "type": "string" },
+                  "product_name": { "type": "string" },
+                  "url": { "type": "string", "format": "uri" },
+                  "price": {
+                    "type": "object",
+                    "properties": {
+                      "value": { "type": "number" },
+                      "currency": { "type": "string" },
+                      "type": { "type": "string", "enum": ["msrp", "estimated", "range"] }
+                    }
+                  },
+                  "key_features": {
+                    "type": "array",
+                    "items": { "type": "string" }
+                  },
+                  "device_compatibility": {
+                    "type": "array",
+                    "items": { "type": "string" }
+                  },
+                  "strengths": {
+                    "type": "array",
+                    "items": { "type": "string" }
+                  },
+                  "weaknesses": {
+                    "type": "array",
+                    "items": { "type": "string" }
+                  },
+                  "differentiation_opportunity": { "type": "string" }
+                }
+              }
+            },
+            "market_gaps": {
+              "type": "array",
+              "items": { "type": "string" }
+            },
+            "competitive_advantage": { "type": "string" },
+            "research_limitations": { "type": "string" }
+          }
+        },
+        "additional_considerations": {
+          "type": "object",
+          "properties": {
+            "certifications_required": {
+              "type": "array",
+              "items": { "type": "string" }
+            },
+            "regulatory_requirements": {
+              "type": "array",
+              "items": { "type": "string" }
+            },
+            "sustainability": { "type": "string" },
+            "localization": { "type": "string" },
+            "accessories_ecosystem": { "type": "string" },
+            "service_support": { "type": "string" },
+            "other_notes": { "type": "string" }
+          }
+        },
+        "success_criteria": {
+          "type": "object",
+          "required": ["metrics"],
+          "properties": {
+            "metrics": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "name": { "type": "string" },
+                  "target": { "type": "string" },
+                  "timeframe": { "type": "string" },
+                  "measurement_method": { "type": "string" }
+                }
+              }
+            },
+            "launch_criteria": {
+              "type": "array",
+              "items": { "type": "string" }
+            },
+            "go_no_go_factors": {
+              "type": "array",
+              "items": { "type": "string" }
+            }
+          }
+        }
+      }
+    },
+    "validation": {
+      "type": "object",
+      "description": "Quality checks and completeness validation",
+      "required": ["completeness", "scope_assessment"],
+      "properties": {
+        "completeness": {
+          "type": "object",
+          "properties": {
+            "sections_complete": { "type": "integer", "minimum": 0, "maximum": 12 },
+            "sections_total": { "type": "integer", "const": 12 },
+            "percentage": { "type": "number" },
+            "missing_sections": {
+              "type": "array",
+              "items": { "type": "string" }
+            },
+            "gaps_noted": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "section": { "type": "string" },
+                  "gap": { "type": "string" },
+                  "impact": { "type": "string" }
+                }
+              }
+            }
+          }
+        },
+        "scope_assessment": {
+          "type": "object",
+          "properties": {
+            "overall_status": { "type": "string", "enum": ["green", "yellow", "red"] },
+            "flags": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "level": { "type": "string" },
+                  "reason": { "type": "string" },
+                  "recommendation": { "type": "string" }
+                }
+              }
+            }
+          }
+        },
+        "quality_score": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 100,
+          "description": "Overall MRD quality score"
+        },
+        "ready_for_review": {
+          "type": "boolean"
+        },
+        "reviewer_notes": {
+          "type": "string",
+          "description": "Notes for human reviewer"
+        }
+      }
+    }
+  }
+}
