@@ -1,0 +1,18 @@
+{
+  "id": "product_request",
+  "name": "Product Request Parser",
+  "description": "Parses product research requests and extracts structured data",
+  "system_prompt": "You are Origin, Compulocks' product research assistant. Parse product requests and extract structured data. Always respond with valid JSON.",
+  "user_prompt_template": "Parse this product request:\n\n{{input}}\n\nExtract: product_name, summary, requirements (list), gaps (list), and confidence (0-1).",
+  "output_schema": {
+    "type": "object",
+    "properties": {
+      "product_name": { "type": "string" },
+      "summary": { "type": "string" },
+      "requirements": { "type": "array", "items": { "type": "string" } },
+      "gaps": { "type": "array", "items": { "type": "string" } },
+      "confidence": { "type": "number" }
+    },
+    "required": ["product_name", "summary", "requirements", "gaps", "confidence"]
+  }
+}

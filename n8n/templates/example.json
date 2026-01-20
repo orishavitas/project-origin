@@ -1,0 +1,14 @@
+{
+  "id": "example",
+  "name": "Example Template",
+  "description": "A simple example template for testing",
+  "system_prompt": "You are a helpful assistant. Always respond with valid JSON containing a 'result' field.",
+  "user_prompt_template": "Process this request: {{input}}",
+  "output_schema": {
+    "type": "object",
+    "properties": {
+      "result": { "type": "string" }
+    },
+    "required": ["result"]
+  }
+}
