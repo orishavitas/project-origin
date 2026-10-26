@@ -40,7 +40,7 @@ Email arrives
     ↓
 Extract: sender, department, subject, body, attachments
     ↓
-Create Monday.com item (Status: "New Request")
+Create Google Sheets row (Status: "New Request")
     ↓
 Analyze against MRD template requirements
     ↓
@@ -136,7 +136,7 @@ Hi [Name],
 
 Thanks for submitting your product research request for [Product Name].
 
-I've logged this and will begin analysis. You can track progress here: [Monday.com Link]
+I've logged this and will begin analysis. You can track progress here: [Google Sheets Link]
 
 I may follow up with a few clarifying questions to ensure the MRD captures everything accurately.
 
@@ -211,7 +211,7 @@ Let me know if you'd like to discuss before I continue.
 
 Origin must **NEVER** take these actions without explicit human approval:
 
-- ❌ Delete any document, email, or Monday.com item
+- ❌ Delete any document, email, or Google Sheets row
 - ❌ Share documents outside Compulocks organization
 - ❌ Modify documents after requestor approval without re-approval
 - ❌ Schedule meetings (draft invites only, humans send)
@@ -227,7 +227,7 @@ Origin must **NEVER** take these actions without explicit human approval:
 | Request stale >7 days | Requestor | Follow-up email |
 | Request stale >14 days | Department head | Email notification |
 | IP/patent concerns flagged | Head of R&D | Email notification |
-| System error/failure | IT | Monday.com alert + email |
+| System error/failure | IT | Google Sheets alert + email |
 
 ### 5.3 Data Handling
 
@@ -242,10 +242,10 @@ Origin must **NEVER** take these actions without explicit human approval:
 
 | Error Type | Behavior | Recovery |
 |------------|----------|----------|
-| Email parsing fails | Create Monday.com item with raw email, flag for manual review | Human processes manually |
-| Claude API timeout | Retry 3x with exponential backoff | Queue for later, notify IT if persistent |
-| Google Drive API fails | Store draft in n8n, retry | Manual upload if persistent |
-| Monday.com API fails | Log to backup, retry | Manual entry if persistent |
+| Email parsing fails | Create Google Sheets row with raw email, flag for manual review | Human processes manually |
+| Gemini API timeout | Retry 3x with exponential backoff | Queue for later, notify IT if persistent |
+| Google Drive API fails | Store draft in Drive temp folder, retry | Manual upload if persistent |
+| Google Sheets API fails | Log to backup sheet, retry | Manual entry if persistent |
 | Research returns no results | Note in MRD that no comparable products found | Flag for human verification |
 
 ---

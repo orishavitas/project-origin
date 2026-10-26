@@ -13,8 +13,11 @@
 Load `ORIGIN.md` as system prompt. Execute when ready to research (after clarification if needed).
 
 ```
-n8n: HTTP Request → Claude API
-Note: Enable web search tool for this prompt
+Apps Script (Gemini API):
+const systemPrompt = ORIGIN_TEXT;
+const userPrompt = PROMPT_TEXT_WITH_PARSED_REQUEST;
+const result = callGemini(systemPrompt, userPrompt);
+Note: Enable Gemini web grounding for this prompt
 ```
 
 ---

@@ -12,11 +12,10 @@
 Load `ORIGIN.md` as system prompt. Inject this prompt as user message with email data.
 
 ```
-n8n: HTTP Request → Claude API
-Body: {
-  "system": "[ORIGIN.md contents]",
-  "messages": [{"role": "user", "content": "[This prompt with {{email_data}} injected]"}]
-}
+Apps Script (Gemini API):
+const systemPrompt = ORIGIN_TEXT;
+const userPrompt = PROMPT_TEXT_WITH_EMAIL_DATA;
+const result = callGemini(systemPrompt, userPrompt);
 ```
 
 ---

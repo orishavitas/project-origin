@@ -13,8 +13,10 @@
 Load `ORIGIN.md` as system prompt. Inject this prompt with parsed request data.
 
 ```
-n8n: HTTP Request → Claude API
-Condition: Only run if request.gaps.critical is not empty
+Apps Script (Gemini API):
+const systemPrompt = ORIGIN_TEXT;
+const userPrompt = PROMPT_TEXT_WITH_PARSED_REQUEST;
+const result = callGemini(systemPrompt, userPrompt);
 ```
 
 ---

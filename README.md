@@ -11,7 +11,7 @@
 | Understand the product | [`docs/human/PRD.md`](docs/human/PRD.md) |
 | See AI behavior rules | [`docs/human/DESIGN_GUIDE.md`](docs/human/DESIGN_GUIDE.md) |
 | Build the MVP | [`docs/human/MVP_SPEC.md`](docs/human/MVP_SPEC.md) |
-| Configure Claude API | [`docs/machine/ORIGIN.md`](docs/machine/ORIGIN.md) |
+| Configure Gemini API | [`docs/machine/ORIGIN.md`](docs/machine/ORIGIN.md) |
 | See data schemas | [`docs/machine/SCHEMAS/`](docs/machine/SCHEMAS/) |
 | Use the prompts | [`docs/machine/PROMPTS/`](docs/machine/PROMPTS/) |
 | Check current status | [`STATE.md`](STATE.md) |
@@ -35,7 +35,7 @@ project-origin/
     │   └── MVP_SPEC.md      ← Implementation specification
     │
     └── machine/              ← AI-executable specifications
-        ├── ORIGIN.md         ← System prompt for all Claude calls
+        ├── ORIGIN.md         ← System prompt for all Gemini calls
         ├── COMPETITORS.md    ← Structured competitor data
         │
         ├── SCHEMAS/          ← JSON Schema definitions
@@ -44,7 +44,7 @@ project-origin/
         │   ├── mrd_output.json    ← Final MRD structure
         │   └── validation_rules.json ← Programmatic validation rules
         │
-        └── PROMPTS/          ← Chained Claude prompts
+        └── PROMPTS/          ← Chained Gemini prompts
             ├── 01_parse_email.md    ← Step 1: Parse incoming email
             ├── 02_gap_analysis.md   ← Step 2: Identify missing info
             ├── 03_clarification.md  ← Step 3: Generate clarification email
@@ -85,12 +85,12 @@ Human docs reference their machine implementations:
 
 ## How to Use
 
-### For n8n Implementation
+### For Google Apps Script Implementation
 
-1. Load `docs/machine/ORIGIN.md` as the system prompt for all Claude API calls
+1. Load `docs/machine/ORIGIN.md` as the system prompt for all Gemini API calls
 2. Load the appropriate prompt from `docs/machine/PROMPTS/` as the user message
 3. Validate outputs against schemas in `docs/machine/SCHEMAS/`
-4. Follow workflow structure in `docs/human/MVP_SPEC.md`
+4. Follow Apps Script workflow structure in `docs/human/MVP_SPEC.md`
 
 ### For Stakeholder Review
 

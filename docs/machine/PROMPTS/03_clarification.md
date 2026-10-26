@@ -13,8 +13,10 @@
 Load `ORIGIN.md` as system prompt. Only execute if 02_gap_analysis returned decision = "clarify".
 
 ```
-n8n: IF Node → decision === "clarify" → HTTP Request → Claude API
-Output: Email body for Gmail Send node
+Apps Script (Gemini API):
+const systemPrompt = ORIGIN_TEXT;
+const userPrompt = PROMPT_TEXT_WITH_GAP_ANALYSIS;
+const result = callGemini(systemPrompt, userPrompt);
 ```
 
 ---
@@ -31,7 +33,7 @@ Output: Email body for Gmail Send node
 <product_name>{{product_name}}</product_name>
 <requestor_name>{{requestor_name}}</requestor_name>
 <requestor_email>{{requestor_email}}</requestor_email>
-<monday_link>{{monday_item_url}}</monday_link>
+<tracker_link>{{tracker_link}}</tracker_link>
 <round_number>{{clarification_round}}</round_number>
 </request_context>
 </input>
@@ -103,7 +105,7 @@ Hi {{requestor_name}},
 
 {{email_closing}}
 
-You can also track progress here: {{monday_link}}
+You can also track progress here: {{tracker_link}}
 
 — Origin
 </template>
@@ -113,7 +115,7 @@ You can also track progress here: {{monday_link}}
   "email": {
     "to": "john.smith@compulocks.com",
     "subject": "Quick Questions: Healthcare Tablet Kiosk",
-    "body": "Hi John,\n\nTo complete the MRD for your Healthcare Tablet Kiosk concept, I need a few details:\n\n1. What price range are you targeting for this product?\n   Options: Under $200 / $200-$400 / $400-$600 / Over $600 / Need recommendation\n   (This helps us position against competitors and ensure viable margins.)\n\n2. What's the expected annual volume for this product?\n   Options: Under 500 units / 500-2,000 units / 2,000-10,000 units / Over 10,000 units\n   (Volume impacts tooling decisions and unit economics.)\n\n3. Beyond iPad Pro 12.9, should this support other tablets?\n   Options: iPad Pro 12.9 only / Multiple iPad sizes / iPad and Samsung / Universal\n   (Broader compatibility increases market but adds complexity.)\n\nReply directly to this email — I'll update the MRD with your answers.\n\nYou can also track progress here: https://compulocks.monday.com/boards/123/items/456\n\n— Origin",
+    "body": "Hi John,\n\nTo complete the MRD for your Healthcare Tablet Kiosk concept, I need a few details:\n\n1. What price range are you targeting for this product?\n   Options: Under $200 / $200-$400 / $400-$600 / Over $600 / Need recommendation\n   (This helps us position against competitors and ensure viable margins.)\n\n2. What's the expected annual volume for this product?\n   Options: Under 500 units / 500-2,000 units / 2,000-10,000 units / Over 10,000 units\n   (Volume impacts tooling decisions and unit economics.)\n\n3. Beyond iPad Pro 12.9, should this support other tablets?\n   Options: iPad Pro 12.9 only / Multiple iPad sizes / iPad and Samsung / Universal\n   (Broader compatibility increases market but adds complexity.)\n\nReply directly to this email — I'll update the MRD with your answers.\n\nYou can also track progress here: https://docs.google.com/spreadsheets/d/EXAMPLE\n\n— Origin",
     "thread_id": "abc123"
   },
   "metadata": {

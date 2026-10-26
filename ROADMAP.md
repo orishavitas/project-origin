@@ -27,25 +27,25 @@ Email → MRD Draft      Revisions + Research     PRD + Meetings + Folders
 
 #### 1.1 Infrastructure Setup (Week 1-2)
 - [ ] Create intake email (product-requests@compulocks.com)
-- [ ] Set up Monday.com board with columns
+- [ ] Set up Google Sheets for tracking
 - [ ] Create Google Drive folder structure
 - [ ] Copy MRD template to Templates folder
-- [ ] Set up n8n instance
-- [ ] Configure API credentials (Claude, Gmail, Drive, Monday)
+- [ ] Set up Google Apps Script project
+- [ ] Configure API credentials (Gemini, Gmail, Drive, Sheets)
 
 **Deliverable:** Working infrastructure, all APIs connected
 
 #### 1.2 Build Workflows (Week 2-3)
-- [ ] Workflow 1: Email Intake
-  - [ ] Gmail trigger
-  - [ ] Claude parsing (01_parse_email.md)
-  - [ ] Monday.com item creation
+- [ ] Script 1: Email Intake
+  - [ ] Time-driven trigger
+  - [ ] Gemini parsing (01_parse_email.md)
+  - [ ] Google Sheets item creation
   - [ ] Acknowledgment email
-- [ ] Workflow 2: Clarification Handler
+- [ ] Script 2: Clarification Handler
   - [ ] Gap analysis (02_gap_analysis.md)
   - [ ] Clarification email (03_clarification.md)
   - [ ] Response processing
-- [ ] Workflow 3: MRD Generation
+- [ ] Script 3: MRD Generation
   - [ ] Research (04_research.md)
   - [ ] MRD generation (05_generate_mrd.md)
   - [ ] Google Doc creation
@@ -108,7 +108,7 @@ Email → MRD Draft      Revisions + Research     PRD + Meetings + Folders
 #### 2.3 Approval Tracking
 - [ ] Capture requestor approval
 - [ ] Queue approved MRDs for review
-- [ ] Track status through Monday.com
+- [ ] Track status through Google Sheets
 - [ ] Notification to Head of R&D
 
 #### 2.4 Escalation Automation
@@ -181,8 +181,8 @@ Email → MRD Draft      Revisions + Research     PRD + Meetings + Folders
 | Dependency | Required By | Status | Notes |
 |------------|-------------|--------|-------|
 | IT: Intake email | Phase 1.1 | Pending | Need to request |
-| IT: n8n hosting | Phase 1.1 | Pending | Cloud vs. self-hosted |
-| API keys: Claude | Phase 1.1 | Pending | Anthropic account |
+| IT: Apps Script approvals | Phase 1.1 | Pending | Workspace permissions/scopes |
+| API keys: Gemini | Phase 1.1 | Pending | Google AI Studio / Vertex AI |
 | API keys: Google | Phase 1.1 | Pending | Workspace admin |
 | MRD template access | Phase 1.1 | ✅ Done | Template reviewed |
 

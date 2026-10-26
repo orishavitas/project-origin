@@ -13,9 +13,11 @@
 Load `ORIGIN.md` as system prompt. This is the final generation step.
 
 ```
-n8n: HTTP Request → Claude API
-Max Tokens: 8192 (MRD generation requires more output)
-Temperature: 0.5 (balance creativity with consistency)
+Apps Script (Gemini API):
+const systemPrompt = ORIGIN_TEXT;
+const userPrompt = PROMPT_TEXT_WITH_PARSED_DATA_AND_RESEARCH;
+const result = callGemini(systemPrompt, userPrompt);
+Notes: Max tokens 8192. Temperature 0.5 for consistency.
 ```
 
 ---
