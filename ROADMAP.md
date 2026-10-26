@@ -12,44 +12,42 @@ Phase 1 (MVP)          Phase 2 (Full MRD)       Phase 3 (PRD + Approval)
 [4-6 weeks]            [4-6 weeks]              [4-6 weeks]
      │                      │                        │
      ▼                      ▼                        ▼
-Email → MRD Draft      Revisions + Research     PRD + Meetings + Folders
+Sheet → MRD Draft      Revisions + Research     PRD + Meetings + Folders
 ```
 
 ---
 
 ## Phase 1: MVP ⬅️ CURRENT
 
-**Goal:** Prove core value - email in, MRD draft out  
+**Goal:** Prove core value - request in, MRD draft out  
 **Duration:** 4-6 weeks  
-**Status:** 🔵 Not Started
+**Status:** 🔵 In Progress
 
 ### Milestones
 
 #### 1.1 Infrastructure Setup (Week 1-2)
-- [ ] Create intake email (product-requests@compulocks.com)
-- [ ] Set up Monday.com board with columns
+- [ ] Set up Google Sheets for tracking (Product Requests)
 - [ ] Create Google Drive folder structure
 - [ ] Copy MRD template to Templates folder
-- [ ] Set up n8n instance
-- [ ] Configure API credentials (Claude, Gmail, Drive, Monday)
+- [ ] Set up Google Apps Script project
+- [ ] Configure API credentials (Gemini, Drive, Sheets)
 
 **Deliverable:** Working infrastructure, all APIs connected
 
 #### 1.2 Build Workflows (Week 2-3)
-- [ ] Workflow 1: Email Intake
-  - [ ] Gmail trigger
-  - [ ] Claude parsing (01_parse_email.md)
-  - [ ] Monday.com item creation
-  - [ ] Acknowledgment email
-- [ ] Workflow 2: Clarification Handler
+- [ ] Script 1: Request Intake
+  - [ ] Time-driven trigger (15 mins)
+  - [ ] Gemini parsing (01_parse_request.md)
+  - [ ] Google Sheets updates
+- [ ] Script 2: Clarification Handler
   - [ ] Gap analysis (02_gap_analysis.md)
-  - [ ] Clarification email (03_clarification.md)
+  - [ ] Sheet-based questions logic
   - [ ] Response processing
-- [ ] Workflow 3: MRD Generation
+- [ ] Script 3: MRD Generation
   - [ ] Research (04_research.md)
   - [ ] MRD generation (05_generate_mrd.md)
   - [ ] Google Doc creation
-  - [ ] Notification email
+  - [ ] Sheet status update (Draft Ready)
 
 **Deliverable:** Three workflows operational in isolation
 
@@ -78,7 +76,7 @@ Email → MRD Draft      Revisions + Research     PRD + Meetings + Folders
 **Deliverable:** MVP stable, ready for wider use
 
 ### Phase 1 Success Criteria
-- [ ] Email intake working reliably
+- [ ] Intake working reliably via Sheet
 - [ ] MRD drafts generated within 48 hours
 - [ ] Pilot users report positive experience
 - [ ] <5 critical bugs in production
@@ -94,8 +92,8 @@ Email → MRD Draft      Revisions + Research     PRD + Meetings + Folders
 ### Milestones
 
 #### 2.1 Revision Workflow
-- [ ] Handle revision requests via email
-- [ ] Update MRD and notify requestor
+- [ ] Handle revision requests via Sheet update
+- [ ] Update MRD
 - [ ] Track revision history
 - [ ] Support multiple revision rounds
 
@@ -106,15 +104,14 @@ Email → MRD Draft      Revisions + Research     PRD + Meetings + Folders
 - [ ] Market sizing estimates
 
 #### 2.3 Approval Tracking
-- [ ] Capture requestor approval
+- [ ] Capture requestor approval in Sheet
 - [ ] Queue approved MRDs for review
-- [ ] Track status through Monday.com
-- [ ] Notification to Head of R&D
+- [ ] Track status through Google Sheets
+- [ ] Sheet-based notifications/dashboards
 
 #### 2.4 Escalation Automation
 - [ ] Implement escalation rules
-- [ ] Stale request reminders (7 days)
-- [ ] Department head escalation (14 days)
+- [ ] Stale request flagging (7 days)
 - [ ] Scope violation tracking
 
 ### Phase 2 Success Criteria
@@ -140,8 +137,8 @@ Email → MRD Draft      Revisions + Research     PRD + Meetings + Folders
 - [ ] Version control for PRDs
 
 #### 3.2 Meeting Scheduling
-- [ ] Calendar integration
-- [ ] Draft meeting invites
+- [ ] Calendar integration (Optional)
+- [ ] Draft meeting agendas
 - [ ] Attach relevant documents
 - [ ] Meeting preparation summary
 
@@ -159,7 +156,6 @@ Email → MRD Draft      Revisions + Research     PRD + Meetings + Folders
 
 ### Phase 3 Success Criteria
 - [ ] PRDs generated automatically
-- [ ] Meetings scheduled without manual intervention
 - [ ] Project folders organized consistently
 - [ ] >70% senior management approval rate
 
@@ -172,7 +168,7 @@ Email → MRD Draft      Revisions + Research     PRD + Meetings + Folders
 | AI generates inaccurate data | Medium | High | Human review required | R&D |
 | Low adoption by requestors | Medium | High | Training, communication | Ori |
 | API rate limits | Low | Medium | Queue system, retry logic | IT |
-| Email parsing misses info | Medium | Medium | Clarification workflow | System |
+| Parsing misses info | Medium | Medium | Clarification workflow | System |
 
 ---
 
@@ -180,9 +176,8 @@ Email → MRD Draft      Revisions + Research     PRD + Meetings + Folders
 
 | Dependency | Required By | Status | Notes |
 |------------|-------------|--------|-------|
-| IT: Intake email | Phase 1.1 | Pending | Need to request |
-| IT: n8n hosting | Phase 1.1 | Pending | Cloud vs. self-hosted |
-| API keys: Claude | Phase 1.1 | Pending | Anthropic account |
+| IT: Apps Script approvals | Phase 1.1 | Pending | Workspace permissions/scopes |
+| API keys: Gemini | Phase 1.1 | Pending | Google AI Studio / Vertex AI |
 | API keys: Google | Phase 1.1 | Pending | Workspace admin |
 | MRD template access | Phase 1.1 | ✅ Done | Template reviewed |
 
@@ -193,6 +188,7 @@ Email → MRD Draft      Revisions + Research     PRD + Meetings + Folders
 | Date | Change | Reason |
 |------|--------|--------|
 | 2025-01-19 | Initial roadmap created | Project kickoff |
+| 2026-01-22 | Removed email dependencies | Pivot to Sheet-based workflow |
 
 ---
 

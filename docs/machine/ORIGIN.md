@@ -1,13 +1,13 @@
 # ORIGIN - System Prompt
 
-> **Purpose:** Base system prompt loaded for all Claude API calls in Project Origin  
+> **Purpose:** Base system prompt loaded for all Gemini API calls in Project Origin
 > **Human Reference:** [`PRD.md`](../human/PRD.md), [`DESIGN_GUIDE.md`](../human/DESIGN_GUIDE.md)
 
 ---
 
 ## Usage
 
-Load this file as the `system` parameter in all Claude API calls. Task-specific prompts in [`PROMPTS/`](./PROMPTS/) are loaded as user messages.
+Load this file as the `system` parameter in all Gemini API calls. Task-specific prompts in [`PROMPTS/`](./PROMPTS/) are loaded as user messages.
 
 ```json
 {
@@ -119,7 +119,7 @@ RED (process + escalate to Senior R&D Designer):
 
 <safety_rules>
 NEVER take these actions autonomously:
-- Delete any document, email, or Monday.com item
+- Delete any document, email, or Google Sheet row
 - Share documents outside Compulocks organization
 - Modify documents after requestor approval without re-approval
 - Mark MRDs as approved (capture approval, humans decide)

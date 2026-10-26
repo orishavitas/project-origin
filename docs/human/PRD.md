@@ -9,7 +9,7 @@
 
 ## 1. Executive Summary
 
-Project Origin automates Compulocks' product research workflow. The system receives requests via email, gathers missing information, conducts market research, and generates MRDs from templates—reducing manual overhead while ensuring consistent documentation quality.
+Project Origin automates Compulocks' product research workflow. The system receives requests via Google Sheets, gathers missing information, conducts market research, and generates MRDs from templates—reducing manual overhead while ensuring consistent documentation quality.
 
 **Core value:** Transform unstructured product ideas into structured, actionable MRDs ready for senior management review.
 
@@ -39,7 +39,7 @@ Project Origin automates Compulocks' product research workflow. The system recei
 |------|------|---------------------|
 | Sales Team | Submit requests from customer feedback | Email intake, review drafts |
 | Marketing Team | Submit requests from market opportunities | Email intake, review drafts |
-| R&D Team | Submit technical requests, review/refine MRDs | Email, Monday.com, revision workflow |
+| R&D Team | Submit technical requests, review/refine MRDs | Email, Google Sheets, revision workflow |
 | Head of R&D | Present final PRDs to senior management | Review queue, meeting scheduler |
 | Senior Management | Approve/reject product concepts | Meeting attendance, decisions |
 
@@ -48,18 +48,18 @@ Project Origin automates Compulocks' product research workflow. The system recei
 ## 4. Functional Requirements
 
 ### 4.1 Intake System
-> **Machine Reference:** [`PROMPTS/01_parse_email.md`](../machine/PROMPTS/01_parse_email.md), [`SCHEMAS/request.json`](../machine/SCHEMAS/request.json)
+> **Machine Reference:** [`PROMPTS/01_parse_request.md`](../machine/PROMPTS/01_parse_request.md), [`SCHEMAS/request.json`](../machine/SCHEMAS/request.json)
 
-- Monitor dedicated intake email (product-requests@compulocks.com)
-- Parse product concept, target market, use case, specifications from email body and attachments
-- Identify requestor department from email signature/domain
-- Create Monday.com item for every request with timestamp and source
+- Monitor dedicated intake Sheet
+- Parse product concept, target market, use case, specifications from request text
+- Identify requestor department from input fields
+- Add row to Google Sheets for every request with timestamp and source
 
 ### 4.2 Information Gathering
-> **Machine Reference:** [`PROMPTS/02_gap_analysis.md`](../machine/PROMPTS/02_gap_analysis.md), [`PROMPTS/03_clarification.md`](../machine/PROMPTS/03_clarification.md)
+> **Machine Reference:** [`PROMPTS/02_gap_analysis.md`](../machine/PROMPTS/02_gap_analysis.md)
 
 - Compare request against MRD template requirements to identify gaps
-- Send structured follow-up emails for missing details (max 5 questions, max 2 rounds)
+- Update Sheet with structured follow-up questions for missing details (max 5 questions, max 2 rounds)
 - Track responses and update request record
 - Escalate stale requests after 7 days
 
@@ -82,7 +82,7 @@ Project Origin automates Compulocks' product research workflow. The system recei
 ### 4.5 Review Workflow
 
 - Email requestor when draft MRD is ready
-- Accept revision requests via email reply
+- Accept revision requests via Sheet updates
 - Update MRD based on feedback and notify of changes
 - Record requestor approval and advance to next stage
 
@@ -140,10 +140,10 @@ MRD is valid when all 12 sections have content:
 
 | Component | Technology | Purpose |
 |-----------|------------|---------|
-| Automation Engine | n8n | Workflow orchestration, triggers, API calls |
-| Task Tracking | Monday.com | Request status, assignment, history |
+| Automation Engine | Google Apps Script | Workflow orchestration, triggers, API calls |
+| Task Tracking | Google Sheets | Request status, assignment, history |
 | Document Storage | Google Drive | MRD storage, sharing, versioning |
-| AI Processing | Claude API | Parsing, research, MRD generation |
+| AI Processing | Gemini API | Parsing, research, MRD generation |
 | Email | Gmail API | Intake monitoring, responses |
 | Calendar | Google Calendar | Meeting scheduling (Phase 2) |
 
@@ -153,7 +153,7 @@ MRD is valid when all 12 sections have content:
 
 | Metric | Target | Measurement |
 |--------|--------|-------------|
-| Request-to-Draft Time | < 48 hours | Monday.com timestamps |
+| Request-to-Draft Time | < 48 hours | Google Sheets timestamps |
 | MRD Completion Rate | > 90% | Completed vs. abandoned |
 | Revision Cycles | < 3 average | Version count |
 | Requestor Satisfaction | > 4/5 rating | Post-approval survey |
@@ -180,7 +180,7 @@ MRD is valid when all 12 sections have content:
 | Email parsing misses key information | Medium | Structured follow-up questions fill gaps |
 | Low adoption by requestors | High | Training, clear communication on benefits |
 | API rate limits or downtime | Medium | Queue system, retry logic, fallback notifications |
-| Confidential data in AI processing | Medium | Claude API data not used for training |
+| Confidential data in AI processing | Medium | Gemini API data not used for training |
 
 ---
 
@@ -188,7 +188,7 @@ MRD is valid when all 12 sections have content:
 
 | Phase | Scope | Duration |
 |-------|-------|----------|
-| **Phase 1 (MVP)** | Email intake, Monday.com integration, basic MRD generation | 4-6 weeks |
+| **Phase 1 (MVP)** | Email intake, Google Sheets tracking, basic MRD generation | 4-6 weeks |
 | **Phase 2** | Full MRD workflow: research, revisions, approval tracking | 4-6 weeks |
 | **Phase 3** | PRD generation, meeting scheduling, project folders | 4-6 weeks |
 

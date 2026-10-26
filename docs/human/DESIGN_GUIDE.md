@@ -36,16 +36,16 @@ The AI operates as **Origin**, Compulocks' product research assistant.
 ### 2.1 Request Intake Flow
 
 ```
-Email arrives
+Request arrives (via Form/Sheet)
     ↓
-Extract: sender, department, subject, body, attachments
+Extract: sender, department, request text
     ↓
-Create Monday.com item (Status: "New Request")
+Update Google Sheets row (Status: "Processing")
     ↓
 Analyze against MRD template requirements
     ↓
 Critical gaps found?
-    ├─ YES → Send clarification email (max 5 questions)
+    ├─ YES → Update Sheet with clarification questions (max 5 questions)
     └─ NO → Proceed to research
 ```
 
@@ -53,7 +53,7 @@ Critical gaps found?
 
 | Rule | Rationale |
 |------|-----------|
-| Maximum 5 questions per email | Prevents overwhelming requestor |
+| Maximum 5 questions per request | Prevents overwhelming requestor |
 | Prioritize must-have gaps first | Target market, use case, price are critical |
 | Offer multiple-choice where possible | Reduces friction, faster responses |
 | Include context for why info is needed | Helps requestor understand importance |
@@ -93,6 +93,7 @@ All requests are processed. Scope concerns are flagged, not blocked.
 ## 3. Research Behavior
 > **Machine Reference:** [`PROMPTS/04_research.md`](../machine/PROMPTS/04_research.md)
 
+
 ### 3.1 Competitive Research
 
 **Primary competitors to research:**
@@ -127,79 +128,38 @@ Origin must acknowledge these limitations explicitly:
 ## 4. Communication Templates
 > **Machine Reference:** [`ORIGIN.md`](../machine/ORIGIN.md) §Communication
 
-### 4.1 Acknowledgment Email
+### 4.1 Acknowledgment (Sheet Status)
+
+(No email sent. Status updates to "Processing" in the Sheet.)
+
+### 4.2 Clarification Request (Sheet Column)
+
+(Written to "Questions" column in Sheet)
 
 ```
-Subject: Product Request Received: [Product Name]
-
-Hi [Name],
-
-Thanks for submitting your product research request for [Product Name].
-
-I've logged this and will begin analysis. You can track progress here: [Monday.com Link]
-
-I may follow up with a few clarifying questions to ensure the MRD captures everything accurately.
-
-— Origin
-```
-
-### 4.2 Clarification Request
-
-```
-Subject: Quick Questions: [Product Name]
-
-Hi [Name],
-
 To complete the MRD for [Product Name], I need a few details:
 
 1. [Question with context]
 2. [Question with context]
 3. [Question with context]
 
-Reply directly to this email — I'll update the MRD with your answers.
-
-— Origin
+Please update the request in the sheet with your answers — I'll update the MRD.
 ```
 
-### 4.3 Draft Ready Notification
+### 4.3 Draft Ready Notification (Sheet Status)
+
+(Status updates to "Draft Ready". Link written to "MRD Link" column.)
+
+### 4.4 Scope Flag Notification (Sheet Column)
+
+(Written to "Scope Flags" column in Sheet)
 
 ```
-Subject: MRD Draft Ready for Review: [Product Name]
-
-Hi [Name],
-
-The MRD for [Product Name] is ready for your review:
-[Google Doc Link]
-
-Key highlights:
-• [Summary point 1]
-• [Summary point 2]
-• [Summary point 3]
-
-Please review and reply with one of:
-1. Approve as-is
-2. Request revisions (include specific changes)
-3. Put on hold
-
-— Origin
-```
-
-### 4.4 Scope Flag Notification
-
-```
-Subject: Note on [Product Name] Request
-
-Hi [Name],
-
-I'm proceeding with your [Product Name] request, but wanted to flag:
+Note on [Product Name]:
 
 [Scope concern with explanation]
 
 This won't stop the MRD from being created, but senior management may have questions about [specific area].
-
-Let me know if you'd like to discuss before I continue.
-
-— Origin
 ```
 
 ---
@@ -211,7 +171,7 @@ Let me know if you'd like to discuss before I continue.
 
 Origin must **NEVER** take these actions without explicit human approval:
 
-- ❌ Delete any document, email, or Monday.com item
+- ❌ Delete any document or Google Sheets row
 - ❌ Share documents outside Compulocks organization
 - ❌ Modify documents after requestor approval without re-approval
 - ❌ Schedule meetings (draft invites only, humans send)
@@ -222,19 +182,19 @@ Origin must **NEVER** take these actions without explicit human approval:
 
 | Trigger | Escalate To | Method |
 |---------|-------------|--------|
-| Requestor insists on out-of-scope (1st time) | Senior R&D Designer | Email notification |
-| Repeated boundary violations (3+) | IT, Regional Sales Mgr, SVP Marketing, SVP Sales | Email notification |
-| Request stale >7 days | Requestor | Follow-up email |
-| Request stale >14 days | Department head | Email notification |
-| IP/patent concerns flagged | Head of R&D | Email notification |
-| System error/failure | IT | Monday.com alert + email |
+| Requestor insists on out-of-scope (1st time) | Senior R&D Designer | Sheet notification |
+| Repeated boundary violations (3+) | IT, Regional Sales Mgr, SVP Marketing, SVP Sales | Sheet notification |
+| Request stale >7 days | Requestor | Flag in Sheet |
+| Request stale >14 days | Department head | Flag in Sheet |
+| IP/patent concerns flagged | Head of R&D | Flag in Sheet |
+| System error/failure | IT | Google Sheets alert |
 
 ### 5.3 Data Handling
 
 - All documents stored in designated Google Drive folders only
 - No customer names or contact info stored outside approved systems
 - Research data attributed to sources
-- Email threads preserved for audit trail
+- Email threads preserved for audit trail (if applicable)
 
 ---
 
@@ -242,10 +202,10 @@ Origin must **NEVER** take these actions without explicit human approval:
 
 | Error Type | Behavior | Recovery |
 |------------|----------|----------|
-| Email parsing fails | Create Monday.com item with raw email, flag for manual review | Human processes manually |
-| Claude API timeout | Retry 3x with exponential backoff | Queue for later, notify IT if persistent |
-| Google Drive API fails | Store draft in n8n, retry | Manual upload if persistent |
-| Monday.com API fails | Log to backup, retry | Manual entry if persistent |
+| Request parsing fails | Create Google Sheets row with raw request, flag for manual review | Human processes manually |
+| Gemini API timeout | Retry 3x with exponential backoff | Queue for later, notify IT if persistent |
+| Google Drive API fails | Store draft in Drive temp folder, retry | Manual upload if persistent |
+| Google Sheets API fails | Log to backup sheet, retry | Manual entry if persistent |
 | Research returns no results | Note in MRD that no comparable products found | Flag for human verification |
 
 ---
@@ -264,10 +224,9 @@ Origin must **NEVER** take these actions without explicit human approval:
 
 ### 7.2 Communication Quality
 
-- [ ] Emails under 200 words unless detailed response required
 - [ ] Questions numbered and specific
 - [ ] Links always included for document references
-- [ ] Clear call-to-action in every email
+- [ ] Clear call-to-action in every message
 
 ---
 

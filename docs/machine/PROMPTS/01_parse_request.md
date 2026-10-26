@@ -1,7 +1,7 @@
-# 01_parse_email.md
+# 01_parse_request.md
 
 > **Chain Position:** 1 of 5  
-> **Input:** Raw email content  
+> **Input:** Raw request text  
 > **Output:** `request.json` schema  
 > **Human Reference:** PRD.md §4.1, DESIGN_GUIDE.md §2.1
 
@@ -9,53 +9,43 @@
 
 ## Usage
 
-Load `ORIGIN.md` as system prompt. Inject this prompt as user message with email data.
+Load `ORIGIN.md` as system prompt. Inject this prompt as user message with request data.
 
 ```
-n8n: HTTP Request → Claude API
-Body: {
-  "system": "[ORIGIN.md contents]",
-  "messages": [{"role": "user", "content": "[This prompt with {{email_data}} injected]"}]
-}
+Apps Script (Gemini API):
+const systemPrompt = ORIGIN_TEXT;
+const userPrompt = PROMPT_TEXT_WITH_REQUEST_DATA;
+const result = callGemini(systemPrompt, userPrompt);
 ```
 
 ---
 
 <task type="parse">
-<name>Parse Product Research Request Email</name>
+<name>Parse Product Research Request</name>
 
 <input>
-<email>
-<from>{{sender_email}}</from>
-<subject>{{email_subject}}</subject>
-<body>
-{{email_body}}
-</body>
-<received_at>{{timestamp}}</received_at>
-<thread_id>{{thread_id}}</thread_id>
-<message_id>{{message_id}}</message_id>
-<attachments>{{attachments_json}}</attachments>
-</email>
+<request>
+<body_text>
+{{request_body}}
+</body_text>
+<timestamp>{{timestamp}}</timestamp>
+</request>
 </input>
 
 <instructions>
-Parse this product research request email and extract structured data.
+Parse this product research request and extract structured data.
 
-1. SENDER IDENTIFICATION
-   - Extract sender name and email
-   - Infer department from:
-     * Email signature (look for title/department)
-     * Email domain patterns
-     * Default to "Unknown" if unclear
-   - Note how department was determined
-
+1. REQUESTOR IDENTIFICATION
+   - Extract any names or departments if mentioned in the text
+   - Default to "Unknown" if not explicit
+   
 2. PRODUCT CONCEPT EXTRACTION
-   - Derive product name from subject line or first mention
+   - Derive product name from the first sentence or core concept
    - Write 1-2 sentence summary capturing the core concept
    - Identify product category (enclosure, mount, stand, lock, charging, accessory, other)
 
 3. DATA EXTRACTION
-   Map email content to these fields:
+   Map content to these fields:
    - target_markets: Which verticals? (Retail, Hospitality, Healthcare, Corporate, Education)
    - use_cases: What will users do with this product?
    - target_price: Any price mentioned? (exact, range, maximum, approximate)
@@ -87,7 +77,6 @@ If a field cannot be determined, use null.
 <verification>
 Before returning, verify:
 - [ ] request_id is properly formatted
-- [ ] sender.department is one of: Sales, Marketing, R&D, Unknown
 - [ ] gaps.critical only includes truly blocking items
 - [ ] scope_flags have valid levels (green, yellow, red)
 - [ ] All required schema fields are present
@@ -97,21 +86,21 @@ Before returning, verify:
 {
   "request_id": "ORIGIN-20250119-4829",
   "sender": {
-    "email": "john.smith@compulocks.com",
-    "name": "John Smith",
-    "department": "Sales",
-    "inferred_from": "Email signature: 'Regional Sales Manager'"
+    "email": null,
+    "name": "Unknown",
+    "department": "Unknown",
+    "inferred_from": "None"
   },
   "product_concept": {
     "name": "Healthcare Tablet Kiosk",
     "summary": "Floor-standing tablet enclosure for patient check-in at hospital reception areas, requiring integrated card reader and sanitizable surface."
   },
   "raw_email": {
-    "subject": "New product idea - hospital check-in kiosk",
-    "body": "[original email body]",
+    "subject": null,
+    "body": "[original request text]",
     "received_at": "2025-01-19T10:30:00Z",
-    "thread_id": "abc123",
-    "message_id": "def456",
+    "thread_id": null,
+    "message_id": null,
     "attachments": []
   },
   "extracted_data": {
@@ -150,7 +139,7 @@ Before returning, verify:
   ],
   "metadata": {
     "parsed_at": "2025-01-19T10:35:00Z",
-    "parser_version": "01_parse_email.md v1.0",
+    "parser_version": "01_parse_request.md v1.0",
     "confidence": 0.85
   }
 }

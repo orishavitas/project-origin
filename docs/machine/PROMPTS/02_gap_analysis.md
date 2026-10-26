@@ -1,9 +1,9 @@
 # 02_gap_analysis.md
 
 > **Chain Position:** 2 of 5  
-> **Input:** `request.json` from 01_parse_email  
+> **Input:** `request.json` from 01_parse_request  
 > **Output:** Gap assessment with question recommendations  
-> **Depends On:** 01_parse_email.md  
+> **Depends On:** 01_parse_request.md  
 > **Human Reference:** PRD.md §4.2, DESIGN_GUIDE.md §2.2
 
 ---
@@ -13,8 +13,10 @@
 Load `ORIGIN.md` as system prompt. Inject this prompt with parsed request data.
 
 ```
-n8n: HTTP Request → Claude API
-Condition: Only run if request.gaps.critical is not empty
+Apps Script (Gemini API):
+const systemPrompt = ORIGIN_TEXT;
+const userPrompt = PROMPT_TEXT_WITH_PARSED_REQUEST;
+const result = callGemini(systemPrompt, userPrompt);
 ```
 
 ---
@@ -79,7 +81,7 @@ Analyze the parsed request and determine if clarification is needed.
 
 4. OUTPUT DECISION
    Return one of:
-   - "clarify": Questions to send
+   - "clarify": Questions to ask
    - "proceed": Ready for research
    - "escalate": Human intervention needed (rare)
 </instructions>
@@ -102,10 +104,7 @@ Analyze the parsed request and determine if clarification is needed.
         "context": "Why this matters",
         "options": ["option1", "option2"] | null
       }
-    ],
-    "email_subject": "Quick Questions: [Product Name]",
-    "email_intro": "Opening line for the email",
-    "email_closing": "Closing line"
+    ]
   } | null,
   "proceed_notes": {
     "gaps_to_flag": ["gaps that will be noted in MRD"],
@@ -153,18 +152,8 @@ Before returning, verify:
         "question": "What's the expected annual volume for this product?",
         "context": "Volume impacts tooling decisions and unit economics.",
         "options": ["Under 500 units", "500-2,000 units", "2,000-10,000 units", "Over 10,000 units"]
-      },
-      {
-        "number": 3,
-        "field": "device_compatibility",
-        "question": "Beyond iPad Pro 12.9, should this support other tablets?",
-        "context": "Broader compatibility increases market but adds complexity.",
-        "options": ["iPad Pro 12.9 only", "Multiple iPad sizes", "iPad and Samsung", "Universal tablet support"]
       }
-    ],
-    "email_subject": "Quick Questions: Healthcare Tablet Kiosk",
-    "email_intro": "To complete the MRD for your Healthcare Tablet Kiosk concept, I need a few details:",
-    "email_closing": "Reply directly to this email — I'll update the MRD with your answers."
+    ]
   },
   "proceed_notes": null,
   "escalate_reason": null
